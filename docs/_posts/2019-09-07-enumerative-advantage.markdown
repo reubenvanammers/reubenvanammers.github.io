@@ -14,7 +14,64 @@ In the roleplaying game Dungeon and Dragons (5E), dice are often rolled to deter
 
 What we are trying to do is to calculate the exact effect of that advantage, analytically. For a normal D20 and two dice rolls, this could be relatively easily calculated via simulation or enumeration over all possibilities. This, however, only accounts for our standard version of DnD. What if we wanted to use a variant with a 100 sided dice? Therefore, in order to spice things up, we are going to use an arbitrary $k$ sided die. In addition, for an extended definition of advantage, we're going to roll $$n$$ die and only use the highest value seen. For disadvantage, we roll $$n$$ die and take the lowest. Note that we get the version used in the standard DnD rules if we use $$k=20$$ and $$n=2$$. 
 
- {% raw %}
+
+# Math
+To solve this we are going to use some relatively simple combinatorics in order to get an analytic value. First, we will define what we want mathematicaly. After this, we will attempt to find recurrence relations (a common trick for many combinatorics problems) in order to ultimately find a solution. 
+
+
+To do this, we calculate the average of possible rolls $ \bar{d_a}(n,k)$:
+
+$$\bar{d_a}(n,k) = \frac{1}{k^n} \sum_{d_1,d_2,..d_n = 1}^k \text{max}(d_1,..,d_n)$$
+
+
+To help simplify this expression and create a recurrence relation, first we define the difference between the maximum possible dice roll and the actual dice that were rolled:
+ $$\text{maxdiff}_k(d_1,..,d_n) = k - \text{max}(d_1,..,d_n)$$. 
+
+We can see that $$\text{maxdiff}_{k+1}(d_1,..,d_n)-\text{maxdiff}_{k}(d_1,..,d_n) = 1$$,
+
+as the maximum value differs by 1 and the dice rolled were the same. 
+
+We also can see that 
+$\text{maxdiff}_k(d_1,..,k,..,d_n) = 0$,
+i.e. the max difference equals zero when one of the dice is the maximum value $k$. 
+
+Now we can substitute this into the expected value formula:
+
+$$\sum_{d_1,d_2,..d_n = 1}^k \text{max}(d_1,..,d_n) = \sum_{d_1,d_2,..d_n = 1}^k k - \text{maxdiff}_k(d_1,..,d_n)$$
+$$=k^{n+1} -  \sum_{d_1,d_2,..d_n = 1}^k\text{maxdiff}_k(d_1,..,d_n)$$
+$$=k^{n+1} - \sum_{d_1,d_2,..d_n = 1}^{k-1}\text{maxdiff}_k(d_1,..,d_n) - \sum_{\text{at least one dice is k}}^k\text{max}_k(d_1,..,d_n)$$
+$$=k^{n+1}- \sum_{d_1,d_2,..d_n = 1}^{k-1} \text{maxdiff}_k(d_1,..,d_n) - 0$$
+$$=k^{n+1} -  \sum_{d_1,d_2,..d_n = 1}^{k-1}\text{maxdiff}_{k-1}(d_1,..,d_n)+1$$
+$$=k^{n+1} -(k-1)^{n+1} - (k-1)^n + \sum_{d_1,d_2,..d_n = 1}^{k-1}\text{maxdiff}(d_1,..,d_n)$$
+
+With this, and the fact that $\sum_{d_1,d_2,..d_n = 1}^{1}\text{max}(d_1,..,d_n) =1 =1^n$, we can see that 
+
+$$\sum_{d_1,d_2,..d_n = 1}^k \text{max}(d_1,..,d_n) = k^{n+1} - \sum_{i=1}^{k-1} i^n$$
+
+This gives us the relatively simple expression:
+
+$$\bar{d_a}(n,k) = k- \frac{1}{k^n}\sum_{i=1}^{k-1} i^n$$
+
+For the case of the two dice having 20 sides each in DnD, we see that the average roll is:
+
+
+$$20-\frac{1}{400}\sum_{i=1}^{19}i^2 = 13.825$$.
+
+meaning that on average, advantage gives $13.825 - 10.5 = 3.325$ dice pips higher than a standard dice roll. Due to symmetry, it is clear that this is the same as the penalty acquired from disadvantage, meaning that the average roll from disadvantage is $10.5 - 3.325 =  7.175$.
+
+# Generalizing Further
+
+Another possible generalization is to not pick the highest possible dice when rolling advantage. Rather, drop the lowest valued dice, and keep the higher valued ones, and sum them up. We can see an example of this during 5E character creation, where one method of generating character statistics is to roll 4 6 sided die, and sum the values of the highest 3 values.
+
+I didn't have much success in generalizing to this extent, due to the more complex interplay between dice. In general, generating series of 3 variables tends to be more complicated than two as recurrence relations get more complex. An approach to do this would be the generation of an appropriate 2 variable generating function, although I haven't had much luck with doing this - although I'd be keen to hear if anyone knows a good approach to this. 
+
+
+
+
+
+
+
+ <!-- {% raw %}
   $$a^2 + b^2 = c^2$$
  {% endraw %}
-$$a^2 + b^2 = c^2$$
+$$a^2 + b^2 = c^2$$ -->
