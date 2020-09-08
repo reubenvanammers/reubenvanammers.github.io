@@ -39,7 +39,7 @@ Now we can substitute this into the expected value formula:
 
 $$\sum_{d_1,d_2,..d_n = 1}^k \text{max}(d_1,..,d_n) = \sum_{d_1,d_2,..d_n = 1}^k k - \text{maxdiff}_k(d_1,..,d_n)$$
 $$=k^{n+1} -  \sum_{d_1,d_2,..d_n = 1}^k\text{maxdiff}_k(d_1,..,d_n)$$
-$$=k^{n+1} - \sum_{d_1,d_2,..d_n = 1}^{k-1}\text{maxdiff}_k(d_1,..,d_n) - \sum_{\text{at least one dice is k}}^k\text{max}_k(d_1,..,d_n)$$
+$$=k^{n+1} - \sum_{d_1,d_2,..d_n = 1}^{k-1}\text{maxdiff}_k(d_1,..,d_n) - \sum_{\text{at least one dice is k}}^k\text{maxdiff}_k(d_1,..,d_n)$$
 $$=k^{n+1}- \sum_{d_1,d_2,..d_n = 1}^{k-1} \text{maxdiff}_k(d_1,..,d_n) - 0$$
 $$=k^{n+1} -  \sum_{d_1,d_2,..d_n = 1}^{k-1}\text{maxdiff}_{k-1}(d_1,..,d_n)+1$$
 $$=k^{n+1} -(k-1)^{n+1} - (k-1)^n + \sum_{d_1,d_2,..d_n = 1}^{k-1}\text{maxdiff}(d_1,..,d_n)$$
