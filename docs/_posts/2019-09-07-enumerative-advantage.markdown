@@ -53,8 +53,8 @@ $$
 
 & =k^{n+1} -  \sum_{d_1,d_2,..d_n = 1}^{k-1} \left( \text{maxdiff}_{k-1}(d_1,..,d_n)+1 \right) \\
 
-& =k^{n+1} - (k-1)^{n} - \sum_{d_1,d_2,..d_n = 1}^{k-1}\text{maxdiff}(d_1,..,d_n)  \\
-& =k^{n+1} - (k-1)^{n} + (k-1)^{n+1} - (k-1)^{n+1} - \sum_{d_1,d_2,..d_n = 1}^{k-1}\text{maxdiff_k}(d_1,..,d_n)  \\
+& =k^{n+1} - (k-1)^{n} - \sum_{d_1,d_2,..d_n = 1}^{k-1}\text{maxdiff}_{k-1}(d_1,..,d_n)  \\
+& =k^{n+1} - (k-1)^{n} + (k-1)^{n+1} - (k-1)^{n+1} - \sum_{d_1,d_2,..d_n = 1}^{k-1}\text{maxdiff}_{k-1}(d_1,..,d_n)  \\
 & =k^{n+1} - (k-1)^{n} - (k-1)^{n+1} + \sum_{d_1,d_2,..d_n = 1}^{k-1}\text{max}(d_1,..,d_n)  \\
 
 \end{aligned}
