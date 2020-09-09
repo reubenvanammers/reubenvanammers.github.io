@@ -92,12 +92,26 @@ Phew! That simplified nicely! This gives us the relatively compact expression, b
 
 $$\bar{d_e}(n,k) = k- \frac{1}{k^n}\sum_{i=1}^{k-1} i^n$$
 
+We can help convince ourselves that this is correct by some quick checks. If we set $n=1$, in other words, only rolling one dice, we expect to get the mean dice roll.
+
+$$\bar{d_e}(1,k) = k- \frac{1}{k}\sum_{i=1}^{k-1} i$$
+
+We notice the sum is just the $(k-1)$th triangular numbers and therefore given by the formula $\frac{k(k-1)}{2}$.
+
+Substituting back in we get 
+
+$$\bar{d_e}(1,k) = k- \frac{k-1}{2} = \frac{k+1}{2}$$
+
+as expected.
+
+
 For the case of the two dice having 20 sides each in DnD, we see that the average roll is:
 
 
 $$20-\frac{1}{400}\sum_{i=1}^{19}i^2 = 13.825$$
 
 This means that on average, advantage gives $13.825 - 10.5 = 3.325$ dice pips higher than a standard dice roll. Due to symmetry, it is clear that this is the same as the penalty acquired from disadvantage, meaning that the average roll from disadvantage is $10.5 - 3.325 =  7.175$.
+
 
 # Generalizing Further
 
