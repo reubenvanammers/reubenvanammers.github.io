@@ -30,6 +30,33 @@ If you have a more complicated system whereby its impractical to have each state
 
 # Monte Carlo Tree Search
 
+Before we talk about how AlphaGo works, I'll discuss one of the key components, Monte Carlo Tree search, or MCTS for short. The "Monte Carlo" component of the name refes to the random element of the algorithm, while tree search refers to (you guessed it) that it uses a game tree in order to evaluate moves.
+
+MCTS is based on set on a relatively simple set of principles, although they can get more complicated in practise: Selection, Expansion, Scoring and Backup. Each of these is done a fixed number $(N)$ times, after which a move is selected and played. I'll go over these in more detail. 
+
+## Selection
+
+There is a couple of different of ways to select the moves that are used. One of the most common ways that is used in MCTS is called the Upper Confidence Bound for Trees algorithm, or UCT for short. AlphaZero uses a variant called Polynomial Upper Confidence Bound for Trees, or PUCT. The aim of these methods is to balance exploitation and exploration, a common problem in reinforcement learning algorithms. We want to choose moves that we think are good, without neglecting other possibilities that may end up being better. 
+
+To do this, we choose the action that satisfies the search function containing both exploration and exploitation related quantities:
+
+$$a = \argmax_a(Q(s,a) + U(s,a))$$
+
+$Q(s,a)$ relates to the quality of the move at a specific node. It is calculated by calculating the average value of all moves below it in the tree - in other words, all moves played from this point. We'll talk about how we calculate value later. 
+
+$U(s,a)$ is the exploration parameter. It is defined by 
+
+$$U(s,a) = c P(s,a) \frac{\sum_bN(s,b)}{1+N(s,a)},$$
+
+where c is a n exploration constant, $N(s,a)$ is the number of times action $a$ has been taken from state $s$, and $P(s,a)$ is the prior probability. The prior can be determined multiple ways - it could be programmed manually, similarly to how many powerful chess engines or DeepBlue were, or it could be calculated in other methods (like a neural network)! We'll again come back to this.
+
+## Expansion
+Once a move has been chosen, we then expand, or simulate it. Once we've simulated the move, we can 
+
+## Scoring
+
+## Backup
+
 # AlphaGo
 
 # Connect 4
