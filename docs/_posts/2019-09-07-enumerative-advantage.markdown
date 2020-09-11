@@ -8,7 +8,7 @@ This post describes some methods of calculating expected values of advantage/dis
 
 
 # Context
-In the roleplaying game Dungeon and Dragons (5E), dice are often rolled to determine the determine the results of actions, both inside and outside of combat. Often, due to the context of the situation, dice are rolled with advantage or disadvantage to reflect that an action is more or less likely to succeed respectively. In the case of advantage, two die (which are D20, a dice with 20 sides) are rolled instead of one, and the highest number is chosen. In the case of disadvantage, two dice are again rolled, but this time the lower number is chosen instead. Higher numbers are generally better, and passing thresholds will have positive effects. The question is: exactly how good is advanage?
+In the roleplaying game Dungeon and Dragons (5E), dice are often rolled to determine the determine the results of actions, both inside and outside of combat. Often, due to the context of the situation, dice are rolled with advantage or disadvantage to reflect that an action is more or less likely to succeed respectively. In the case of advantage, two die (which are D20, a dice with 20 sides) are rolled instead of one, and the highest number is chosen. In the case of disadvantage, two dice are again rolled, but this time the lower number is chosen instead. Higher numbers are generally better, and passing thresholds will have positive effects. The question is: exactly how good is advantage?
 
 # Goal
 
@@ -16,7 +16,7 @@ What we are trying to do is to calculate the exact effect of that advantage, ana
 
 
 # Math
-To solve this we are going to use some relatively simple combinatorics in order to get an analytic value. First, we will define what we want mathematicaly. After this, we will attempt to find recurrence relations (a common trick for many combinatorics problems) in order to ultimately find a solution. 
+To solve this we are going to use some relatively simple combinatorics in order to get an analytic value. First, we will define what we want mathematically. After this, we will attempt to find recurrence relations (a common trick for many combinatorics problems) in order to ultimately find a solution. 
 
 
 To do this, we calculate the expected value of possible rolls $ \bar{d_e}(n,k)$ for n dice of k sides:
