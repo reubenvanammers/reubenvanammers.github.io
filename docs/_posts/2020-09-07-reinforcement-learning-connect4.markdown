@@ -30,7 +30,7 @@ If you have a more complicated system whereby its impractical to have each state
 
 ## Monte Carlo Tree Search
 
-Before we talk about how AlphaGo works, I'll discuss one of the key components, Monte Carlo Tree search, or MCTS for short. The "Monte Carlo" component of the name refes to the random element of the algorithm, while tree search refers to (you guessed it) that it uses a game tree in order to evaluate moves.
+Before we talk about how AlphaGo works, I'll discuss one of the key components, Monte Carlo Tree search, or MCTS for short. The "Monte Carlo" component of the name refers to the random element of the algorithm, while tree search refers to (you guessed it) that it uses a game tree in order to evaluate moves.
 
 MCTS is based on set on a relatively simple set of principles, although they can get more complicated in practice: Selection, Expansion, Scoring and Backup. Each of these is done a fixed number $(M)$ times, after which a move is selected and played. I'll go over these in more detail. 
 
@@ -90,7 +90,7 @@ In terms of complexity, it's significantly more complicated than a a game like T
 
 ## Implementation
 
-I implememented this system with a combination of Pytorch and Python - torch for the neural network evaluation and training, and python for the tree algorithm and all the surrounding bits and pieces. Because of the high computational requirements of the system, I wrote it so that it could be parallelized. There was a set of workers which played games against themselves using the latest version of the trained model, and these workers passed the results of the games back in a queue so that they could be stored in a memory object. There was also another worker which used the memory object to train the model.
+I implemented this system with a combination of Pytorch and Python - torch for the neural network evaluation and training, and python for the tree algorithm and all the surrounding bits and pieces. Because of the high computational requirements of the system, I wrote it so that it could be parallelized. There was a set of workers which played games against themselves using the latest version of the trained model, and these workers passed the results of the games back in a queue so that they could be stored in a memory object. There was also another worker which used the memory object to train the model.
 
 About the neural network itself: I used a set of convolutional layers with the two heads, policy heads and value heads.
 Initially, I started with 6 convolutional layers with a kernel size of 3, which is enough to span the $6*7$ Connect 4 board.
