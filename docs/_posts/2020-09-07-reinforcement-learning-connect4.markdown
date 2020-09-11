@@ -84,9 +84,28 @@ During training, the workers playing the game get updated with the latest versio
 
 ## Connect 4
 
-When 
+When I attempted to implemented something that was similar to the AlphaGo algorithm, I decided to mainly work with Connect 4. If you're not familiar with the game, players take turns in placing their colored token in a $6*7$ grid. The token falls to the lowest empty place in the column. The aim of the game, as might be expected from it's name, is to get 4 of your own color in a straight line, whether thats a row, column or diagonal. 
+
+In terms of complexity, it's significantly more complicated than a a game like Tic-Tac-Toe, which has a relatively trivial solution. Connect-4 is a solved game, although the solution is very complicated - it's been found that the player that goes can force a win, but any deviation from optimal play can allow the opponent to force a win. Nevertheless, it's complicated enough to allow complex emergent behavior, without being some complicated that it's infeasible to program and train with an individual's resources.
 
 ## Implementation
+
+I implememented this system with a combination of Pytorch and Python - torch for the neural network evaluation and training, and python for the tree algorithm and all the surrounding bits and pieces. Because of the high computational requirements of the system, I wrote it so that it could be parallelisized. There was a set of workers which played games against themselves using the latest version of the trained model, and these workers passed the results of the games back in a queue so that they could be stored in a memory object. There was also another worker which used the memory object to train the model.
+
+About the neural network itself: I used a set of convolutional layers with the two heads, policy heads and value heads.
+Initially, I started with 6 convolutional layers with a kernel size of 3, which is enough to span the $6*7$ Connect 4 board.
+Eventually, I ended up moving to a 15 layer network, which seemed to improve performance after a while. I did notice that dropout layers on both of the heads of the network did seem to improve performance, so I ended up using them.
+This was relatively surprising, as generally dropout layers don't seem to be used too often in reinforcement learning due to the fact that stability issues are often quite a big deal in RL - in other words, with so many self reinforcing factors, adding in extra randomness like dropout layers can often reduce performance. 
+I'm guessing that the presence of the tree acted as sufficient support to allow the dropout layer to help with overfitting without causing stability issues. The board state was transformed into a $3*6*7$ representation at the start of the tree - one of the channels represented the positions of pieces of player one, another channel represented the pieces of player two, and the third and final channel represented the positions of empty board spaces.
+This was chosen to help the network infer potential lines of victory. 
+
+The training worked as follows: 
+
+Firstly, the self play workers played games with themselves for a few hundred games, enough to populate the memory object. Then, training in earnest started - epoch 0 starts. The update worker continually trains the model, while the self play workers play a set number of games (say 500 games). Once of the games have been completed, the update worker saves the current state of the model and the self play workers updated themselves to use this model. Then, the new model was evaluated by playing against a fixed model.
+
+This fixed model was crucial. Without having a fixed model to compare against, it is basically impossible to determine how your model is training, and whether or not your training pipeline is even working at all - it's something that I only put in after a while, despite how obvious it seems, and something that I'd put in right at the start for a similar project. Initially, this fixed model was hardcoded - for example a random agent which played moves randomly, or an agent which looks one move ahead to go for immediate wins/stop immediate losses. After a while, as the models got stronger as they trained, I had to use trained, fixed models to properly evalulate performace over time. 
+
+
 
 ## Results
 
