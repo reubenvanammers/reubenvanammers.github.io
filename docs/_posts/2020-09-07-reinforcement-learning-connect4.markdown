@@ -70,7 +70,21 @@ $$\tau$$ is a parameter that controls the level of exploration. In practise, we 
 
 ## AlphaGo
 
+As stated previously, AlphaGo is an evolution on MCTS. Surprisingly, it's not a massively different algorithm - it essentially just combines neural networks with the old MCTS algorithm, and gets surprisingly good results. One reason why this may have taken so long is the computational requirements - both tree and neural network based algorithms require significant computational power, combine these as well as the need for self play to generate training data means that huge amounts of resources are needed for complicated games at hight levels of play. 
+
+AlphaGo/AlphaGoZero work slightly differently, so I'll talk about AlphaZero due to it being more recent. AlphaGoZero uses a single neural network with two seperate heads in the MCTS algorithm. One of these heads is a value head, which takes as input a board state and outputs the expected value of winning from that position. The other head is the policy head, which gives a distribution of possible moves that can be played from that board state, favoring what it perceives to be better moves. 
+
+In order to train this network, games are played against itself using a random initial configuration of weights (hence the Zero in AlphaZero) and the board configurations are stored, along with the move played, which player one, and the top level node weights from the tree in MCTS. These weights can then be used to train the model, via minimizing the loss function:
+
+$$l = (z-v)^2 - \boldsymbol{\pi}^Tlog(\mathbf{p})$$
+
+In this equation, $z$ is the actual game winner, $v$ is the expected value of the winning, $\mathbf{p}$ is the prior move probabilities from the policy head and $\boldsymbol{\pi}$ is the actual move probabilities from the MCTS network. In other words, the loss is the sum of the Mean Squared Error of winning, and the cross-entropy of the distributions of the policies. It therefore attempts to balance getting a good estimate of both how good the position looks, and getting an accurate measure of what moves it will play.
+
+During training, the workers playing the game get updated with the latest versions of the trained model. With this, the game quality improves, and the network can further strengthen the weights. This positive feedback loop between the Neural Network training and increasing accuracy via tree-search is the base of the success of AlphaGo.
+
 ## Connect 4
+
+When 
 
 ## Implementation
 
