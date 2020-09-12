@@ -109,3 +109,16 @@ This fixed model was crucial. Without having a fixed model to compare against, i
 
 ## Results
 
+I managed to get some decent results after training the model. To evaluate how good the model was, I scored the models via an [Elo system](https://en.wikipedia.org/wiki/Elo_rating_system), or at least a close analogue. In this rating system, a player that is 400 points above another player is expected to win roughly 90 % of the time.  I played the different models that I'd trained against each other, and recorded the wins/losses/draws. I set the random player to have an  Elo of 0 - this was purely arbitrary, but as the elo rating system is comparative rather than absolute it requires an anchor of some sort. I then minimized the cross entropy loss of the Elo rating of the players assuming this 90% win rate for 400 points above. Doing this, I managed to get some elo scores:
+
+* Random: 0
+* Q learning, 6 hours: ~600
+* One Move Look Ahead: 640
+* 1 hour training, 6 layer NN with MCTS: 870
+* 1 day training, 6 layer NN with MCTS: 1100
+* 5 day training, 15 layer NN with MCTS: 1490
+
+There were some complexities with evaluating players against eachother - there are parameters for each model which determine how much they should exploit vs explore. With all parameters set to minimum randomness, the same outcome would occur every time, leading to a 100% winrate for a particular agent. On the other hand, increasing exploration inherently decreases the strength of the player, especially as Connect 4 has quite a small action space compared to a game like chess. Ultimately, I chose to use a quite, but not absolutely exploit heavy set of parameters for the purposes of evaluation. As 
+
+
+# Observations
