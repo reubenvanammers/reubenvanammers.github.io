@@ -20,7 +20,7 @@ Q learning is one of the more basic reinforcement learning algorithms, and can b
 
 In essence, Q learning attempts to attach a "quality value" to each state action pair, $Q(s,a)$, where s is the state of the environment and $a$ is the action. For discrete environments, this can be viewed as a table where each value of $s$ and $a$ has this attached value readily available. By iterating on an initial guess of what these quality values should be, increasing the score of positions and actions which lead to positive rewards, slowly reaching their actual value. We can see this in the update rule for Q learning:
 
-$$Q^{\text{new}(s_t,a_t) = Q(s_{t},a_{t}) + \alpha \cdot (r + \gamma \cdot \text{argmax}_aQ(s_{t+1},a)-Q(s_{t},a_{t}))$$
+$$Q^{\text{new}(s_t,a_t)} = Q(s_t,a_t) + \alpha \cdot \left (r + \gamma \cdot \text{argmax}_aQ(s_{t+1},a)-Q(s_t,a_t) \right )$$
 
 where r is the reward given from action $a_t$ which moves the environment from state $s_t$ to state $s_{t+1}$, and $\gamma$ is a discount factor. 
 
@@ -64,7 +64,7 @@ Once we have the value $v$ of a move, we pass this back up the tree. Every node 
 
 Once these steps have been done $M$ times, it is time to choose the final move to actually play from the state $s_0$. This can be done by a distribution that is proportional to the number of times that node has travelled down:
 
-$$\pi(a)|s_0) = \frac{N(s_0,a)^{1/\tau}{\sum_bN(s_0,b)^{1/\tau}}}$$
+$$\pi(a)|s_0) = \frac{N(s_0,a)^{1/ \tau}}{\sum_bN(s_0,b)^{1/ \tau}}$$
 
 $$\tau$$ is a parameter that controls the level of exploration. In practice, we usually want to vary this parameter depending on the situation - higher values of the parameter increase exploration values, with a value of $\tau=1$ ( mean that all moves get weighted proportional to how much they were explored in the search tree. On the other hand, if you want to exploit and choose the best move possible (at least from the trees perspective) you set $\tau$ to be very low such that the most explored move will almost always be chosen.
 
@@ -93,7 +93,7 @@ In terms of complexity, it's significantly more complicated than a a game like T
 I implemented this system with a combination of PyTorch and Python - torch for the neural network evaluation and training, and python for the tree algorithm and all the surrounding bits and pieces. Because of the high computational requirements of the system, I wrote it so that it could be parallelized. There was a set of workers which played games against themselves using the latest version of the trained model, and these workers passed the results of the games back in a queue so that they could be stored in a memory object. There was also another worker which used the memory object to train the model.
 
 About the neural network itself: I used a set of convolutional layers with the two heads, policy heads and value heads.
-Initially, I started with 6 convolutional layers with a kernel size of 3, which is enough to span the $6*7$ Connect 4 board.
+Initially, I started with 6 convolutional layers with a kernel size of 3, which is enough to span the $6 * 7$ Connect 4 board.
 Eventually, I ended up moving to a 15 layer network, which seemed to improve performance after a while. I did notice that dropout layers on both of the heads of the network did seem to improve performance, so I ended up using them.
 This was relatively surprising, as generally dropout layers don't seem to be used too often in reinforcement learning due to the fact that stability issues are often quite a big deal in RL - in other words, with so many self reinforcing factors, adding in extra randomness like dropout layers can often reduce performance. 
 I'm guessing that the presence of the tree acted as sufficient support to allow the dropout layer to help with overfitting without causing stability issues. The board state was transformed into a $3*6*7$ representation at the start of the tree - one of the channels represented the positions of pieces of player one, another channel represented the pieces of player two, and the third and final channel represented the positions of empty board spaces.
