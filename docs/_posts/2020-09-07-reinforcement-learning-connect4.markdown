@@ -46,7 +46,7 @@ $Q(s,a)$ relates to the quality of the move at a specific node. It is calculated
 
 $U(s,a)$ is the exploration parameter. It is defined by 
 
-$$U(s,a) = c P(s,a) \frac{\sum_bN(s,b)}{1+N(s,a)},$$
+$$U(s,a) = c P(s,a) \frac{\sqrt{\sum_bN(s,b)}}{1+N(s,a)},$$
 
 where c is a n exploration constant, $N(s,a)$ is the number of times action $a$ has been taken from state $s$, and $P(s,a)$ is the prior probability. The prior can be determined multiple ways - it could be programmed manually, similarly to how many powerful chess engines or DeepBlue were, or it could be calculated in other methods (like a neural network)! We'll again come back to this.
 
