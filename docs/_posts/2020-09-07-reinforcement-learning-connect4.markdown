@@ -20,7 +20,7 @@ Q learning is one of the more basic reinforcement learning algorithms, and can b
 
 In essence, Q learning attempts to attach a "quality value" to each state action pair, $Q(s,a)$, where s is the state of the environment and $a$ is the action. For discrete environments, this can be viewed as a table where each value of $s$ and $a$ has this attached value readily available. By iterating on an initial guess of what these quality values should be, increasing the score of positions and actions which lead to positive rewards, slowly reaching their actual value. We can see this in the update rule for Q learning:
 
-$$Q^{\text{new}(s_t,a_t)} = Q(s_t,a_t) + \alpha \cdot \left (r + \gamma \cdot \text{argmax}_aQ(s_{t+1},a)-Q(s_t,a_t) \right )$$
+$$Q^{\text{new}}(s_t,a_t) = Q(s_t,a_t) + \alpha \cdot \left (r + \gamma \cdot \text{argmax}_aQ(s_{t+1},a)-Q(s_t,a_t) \right )$$
 
 where r is the reward given from action $a_t$ which moves the environment from state $s_t$ to state $s_{t+1}$, and $\gamma$ is a discount factor. 
 
