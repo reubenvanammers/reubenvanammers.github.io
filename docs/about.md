@@ -4,9 +4,9 @@ title: About
 permalink: /about/
 ---
 
-I completed a Bachelor of Mathematical Physics, and following this a Masters of Mathematics at the University of Melbourne. I completed my Masters research project under Dr James Osborne, researching cellular remodelling. The resultant thesis is [here](https://github.com/reubenvanammers/research_code/blob/master/thesismaster.pdf). 
+I completed a Bachelor of Mathematical Physics, and following this a Masters of Applied Mathematics at the University of Melbourne. During this  I completed my Masters research project under Dr James Osborne, researching and simulating cellular remodelling. The resultant thesis is [here](https://github.com/reubenvanammers/research_code/blob/master/thesismaster.pdf). 
 
- Following this, I entered the data space in a few companies around the Melbourne, Australia area, and am currently at Eliiza, an AI consultancy.
+ Following this, I entered the data space in a few companies around the Melbourne, Australia area, and am currently at Eliiza, an AI focused consultancy.
 
 Generally interested in problems, especially at the intersection of mathematics and programming. 
 
