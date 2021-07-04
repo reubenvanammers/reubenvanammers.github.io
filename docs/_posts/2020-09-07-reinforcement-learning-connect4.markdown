@@ -141,6 +141,8 @@ When I finished the training, I was still noticing improvements against a refere
 # Update: 30/6/2021
 
 Recently I updated the code to more efficiently make use of the GPU. Previously, during game creation, the states were evaluated on the worker subprocess of that games. This is the simplest option, but doing infererence on only a single state is quite inefficient, due to the constant copying back and forth between the CPU/GPU.
+
 To deal with this, I added the option to batch up work across different cpu threads, by using queues to bring the states to be evaluated to a single process, inferred the results as a batch, and sent the results back. This significantly sped up training - this, and the updating from a old 970 to modern 3070 increased the game creation speed around 20 times, as well as using less GPU memory.
+
 Some further speedups were achieved by parallelizing the game creation within the worker process and within the game itself. The MCTS algorithm can be parallelized via the use of virtual loss, where a worker thread evaluating a tree updates the node values so that it looks like the result of the evaluation is a loss while still in progress, allowing multiple different moves to be attempted.
 Consequently, I could use larger models, which trained in less time than previously, and could get better results, noted above in the results section.
