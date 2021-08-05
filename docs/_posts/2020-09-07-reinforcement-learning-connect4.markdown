@@ -6,6 +6,8 @@ categories: blog
 ---
 Recently, I've been doing some work with reinforcement learning with two player zero sum games. These games, which include games like Chess and Go, are some of the most commonly played competitive games. I used a couple of different techniques from Reinforcement learning, such as Q learning and the algorithm behind AlphaGo.
 
+You can have a look at the repo I used to do this [here](https://github.com/reubenvanammers/self_play_reinforcement_learning).
+
 In this post, I'll be talking a bit about techniques in reinforcement learning, an overview of AlphaGo, how I implemented an algorithm similar to it in the game of Connect 4, and what the results were. 
 
 ## Reinforcement Learning
