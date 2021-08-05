@@ -117,7 +117,7 @@ I managed to get some decent results after training the model. To evaluate how g
 * 1 hour training, 6 layer NN with MCTS: 870
 * 1 day training, 6 layer NN with MCTS: 1100
 * 5 day training, 15 layer NN with MCTS: 1490
-* (Update June 2021) 12 hour traininh, 20 layer NN with MCTS: 1930
+* (Update June 2021) 12 hour training, 20 layer NN with MCTS: 1930
 
 There were some complexities with evaluating players against each other - there are parameters for each model which determine how much they should exploit vs explore. With all parameters set to minimum randomness, the same outcome would occur every time, leading to a 100% winrate for a particular agent. On the other hand, increasing exploration inherently decreases the strength of the player, especially as Connect 4 has quite a small action space compared to a game like chess. Ultimately, I chose to use a quite, but not absolutely exploit heavy set of parameters for the purposes of evaluation. 
 
