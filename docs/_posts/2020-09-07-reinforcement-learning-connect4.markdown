@@ -26,7 +26,7 @@ $$Q^{\text{new}}(s_t,a_t) = Q(s_t,a_t) + \alpha \cdot \left (r + \gamma \cdot \t
 
 where r is the reward given from action $a_t$ which moves the environment from state $s_t$ to state $s_{t+1}$, and $\gamma$ is a discount factor. 
 
-In essence, Q-learning attempts to see how good a move is by seeing how good the state its moving into is, and how much a reward it gets from doing so. Initially, its guess at how good the state its going into isn't great (or why would you need this algorithm in the first place), but by successive iterations can usually get to a reasonable level of accuracy.
+In essence, Q-learning attempts to see how good a move is by seeing how good the state its moving into is, and how much a reward it gets from doing so. Initially, its guess at how good the state its going into isn't great (you wouldn't need this algorithm in the first place), but by successive iterations can usually get to a reasonable level of accuracy.
 
 If you have a more complicated system whereby its impractical to have each state action pair in a table, then essentially you need to have a function to approximate the value of Q - this can be a neural network or the like, and is what was used during implementation. 
 
@@ -44,7 +44,7 @@ To do this, we choose the action that satisfies the search function containing b
 
 $$a = \text{argmax}_a(Q(s,a) + U(s,a))$$
 
-$Q(s,a)$ relates to the quality of the move at a specific node. It is calculated by calculating the average value of all moves below it in the tree - in other words, all moves played from this point. We'll talk about how we calculate value later. 
+$Q(s,a)$ relates to the quality of the move at a specific node. It is calculated by averaging the value of all moves below it in the tree - in other words, all moves played from this point. We'll talk about how we calculate value later. 
 
 $U(s,a)$ is the exploration parameter. It is defined by 
 
@@ -53,7 +53,7 @@ $$U(s,a) = c P(s,a) \frac{\sqrt{\sum_bN(s,b)}}{1+N(s,a)},$$
 where c is a n exploration constant, $N(s,a)$ is the number of times action $a$ has been taken from state $s$, and $P(s,a)$ is the prior probability. The prior can be determined multiple ways - it could be programmed manually, similarly to how many powerful chess engines or DeepBlue were, or it could be calculated in other methods (like a neural network)! We'll again come back to this.
 
 # Expansion and Evaluation
-Once a move has been chosen, we then expand, or simulate it. Once we've simulated the move, we score it. If the games has been finished, this is easy - assign a value $v$ of 1 for a win, 0 for a draw, and -1 for a loss. Otherwise, we need to determine another method for doing so. The traditional way to do this in Monte Carlo Tree Search was to randomly play games from this point, and see what proportion of the games were won - this became the value of the move. In AlphaGo, this was done via the value head of a Neural Network. 
+Once a move has been chosen, we then expand, or simulate, it. Once we've simulated the move, we score it. If the games has been finished, this is easy - assign a value $v$ of 1 for a win, 0 for a draw, and -1 for a loss. Otherwise, we need to determine another method for doing so. The traditional way to do this in Monte Carlo Tree Search was to randomly play games from this point, and see what proportion of the games were won - this became the value of the move. In AlphaGo, this was done via the value head of a Neural Network. 
 
 
 # Backup
@@ -64,11 +64,11 @@ Once we have the value $v$ of a move, we pass this back up the tree. Every node 
 
 # Play
 
-Once these steps have been done $M$ times, it is time to choose the final move to actually play from the state $s_0$. This can be done by a distribution that is proportional to the number of times that node has travelled down:
+Once these steps have been done $M$ times, it is time to choose the final move to actually play from the state $s_0$. This can be done by a distribution that is proportional to the number of times that the node has been travelled down:
 
 $$\pi(a)|s_0) = \frac{N(s_0,a)^{1/ \tau}}{\sum_bN(s_0,b)^{1/ \tau}}$$
 
-$$\tau$$ is a parameter that controls the level of exploration. In practice, we usually want to vary this parameter depending on the situation - higher values of the parameter increase exploration values, with a value of $\tau=1$ ( mean that all moves get weighted proportional to how much they were explored in the search tree. On the other hand, if you want to exploit and choose the best move possible (at least from the trees perspective) you set $\tau$ to be very low such that the most explored move will almost always be chosen.
+$$\tau$$ is a parameter that controls the level of exploration. In practice, we usually want to vary this parameter depending on the situation - higher values of the parameter increase exploration values, with a value of $\tau=1$ meaning that all moves get weighted proportional to how much they were explored in the search tree. On the other hand, if you want to exploit and choose the best move possible (at least from the trees perspective) you set $\tau$ to be very low such that the most explored move will almost always be chosen.
 
 ## AlphaGo
 
@@ -76,7 +76,7 @@ As stated previously, AlphaGo is an evolution on MCTS. Surprisingly, it's not a 
 
 AlphaGo/AlphaGoZero work slightly differently, so I'll talk about AlphaZero due to it being more recent. AlphaGoZero uses a single neural network with two separate heads in the MCTS algorithm. One of these heads is a value head, which takes as input a board state and outputs the expected value of winning from that position. The other head is the policy head, which gives a distribution of possible moves that can be played from that board state, favoring what it perceives to be better moves. 
 
-In order to train this network, games are played against itself using a random initial configuration of weights (hence the Zero in AlphaZero) and the board configurations are stored, along with the move played, which player one, and the top level node weights from the tree in MCTS. These weights can then be used to train the model, via minimizing the loss function:
+In order to train this network, games are played against itself using a random initial configuration of weights (hence the Zero in AlphaZero) and the board configurations are stored, along with the move played and the top level node probabilities from the tree in MCTS. These weights can then be used to train the model, via minimizing the loss function:
 
 $$l = (z-v)^2 - \boldsymbol{\pi}^Tlog(\mathbf{p})$$
 
@@ -88,7 +88,7 @@ During training, the workers playing the game get updated with the latest versio
 
 When I attempted to implemented something that was similar to the AlphaGo algorithm, I decided to mainly work with Connect 4. If you're not familiar with the game, players take turns in placing their colored token in a $6*7$ grid. The token falls to the lowest empty place in the column. The aim of the game, as might be expected from it's name, is to get 4 of your own color in a straight line, whether thats a row, column or diagonal. 
 
-In terms of complexity, it's significantly more complicated than a a game like Tic-Tac-Toe, which has a relatively trivial solution. Connect-4 is a solved game, although the solution is very complicated - it's been found that the player that goes can force a win, but any deviation from optimal play can allow the opponent to force a win. Nevertheless, it's complicated enough to allow complex emergent behavior, without being some complicated that it's infeasible to program and train with an individual's resources.
+In terms of complexity, it's significantly more complicated than a a game like Tic-Tac-Toe, which has a relatively trivial solution. Connect-4 is a solved game, although the solution is very complicated - it's been found that the player that goes can force a win, but any deviation from optimal play can allow the opponent to force a win. Nevertheless, it's complicated enough to allow complex emergent behavior, without being so complicated that it's infeasible to program and train with an individual's resources.
 
 ## Implementation
 
@@ -98,7 +98,7 @@ About the neural network itself: I used a set of convolutional layers with the t
 Initially, I started with 6 convolutional layers with a kernel size of 3, which is enough to span the $6 * 7$ Connect 4 board.
 Eventually, I ended up moving to a 15 layer network, which seemed to improve performance after a while. I did notice that dropout layers on both of the heads of the network did seem to improve performance, so I ended up using them.
 This was relatively surprising, as generally dropout layers don't seem to be used too often in reinforcement learning due to the fact that stability issues are often quite a big deal in RL - in other words, with so many self reinforcing factors, adding in extra randomness like dropout layers can often reduce performance. 
-I'm guessing that the presence of the tree acted as sufficient support to allow the dropout layer to help with overfitting without causing stability issues. The board state was transformed into a $3*6*7$ representation at the start of the tree - one of the channels represented the positions of pieces of player one, another channel represented the pieces of player two, and the third and final channel represented the positions of empty board spaces.
+I'm guessing that the presence of the tree acted as sufficient support to allow the dropout layer to help with overfitting without causing stability issues. The board state was transformed into a $3 * 6 * 7$ representation at the start of the tree - one of the channels represented the positions of pieces of player one, another channel represented the pieces of player two, and the third and final channel represented the positions of empty board spaces.
 This was chosen to help the network infer potential lines of victory. 
 
 The training worked as follows: 
